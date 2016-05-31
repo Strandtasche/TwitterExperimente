@@ -35,7 +35,7 @@ api = tweepy.API(auth)
 #    time.sleep(1)
 #    print(otp)
 
-matchrequest = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?match_id=' + str(arg) + '&key=7D9664892955037443B7E50E163C3019'
+matchrequest = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?match_id=' + str(arg) + '&key=' + STEAM_API_KEY
 r = requests.get(matchrequest)
 
 if r.status_code != 200:
