@@ -9,7 +9,7 @@ def getRecentMatch(id=None, count=None):
     if count == None:
         count = 25
 
-    matchrequest = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?player_name=' + id + '&key=' + STEAM_API_KEY
+    matchrequest = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?player_name=' + id + '&key=' + STEAM_API_KEY + '&matches_requested=2' 
     r = requests.get(matchrequest)
 
 
@@ -19,7 +19,7 @@ def getRecentMatch(id=None, count=None):
         exit()
     else:
         data = r.json()
-        print(json.dumps(data['result']['players'][slot], sort_keys=True, indent=4, separators=(',', ': ')))
-        #print("success")
+        print(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
+    return "success"
 
 
