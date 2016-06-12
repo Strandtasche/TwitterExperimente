@@ -4,12 +4,12 @@ from keys import *
 
 def getRecentMatch(id=None, count=None):
     if id == None:
-        id = "Strandtasche"
+        id = str(51148205)
 
     if count == None:
-        count = 25
+        count = 1
 
-    matchrequest = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?player_name=' + id + '&key=' + STEAM_API_KEY + '&matches_requested=2' 
+    matchrequest = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?account_id=' + id + '&key=' + STEAM_API_KEY + '&matches_requested=1' 
     r = requests.get(matchrequest)
 
 
@@ -20,6 +20,7 @@ def getRecentMatch(id=None, count=None):
     else:
         data = r.json()
         print(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
-    return "success"
+        current = open('currentGame', 'r')
+        print(current)
 
 

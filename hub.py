@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import tweepy, time, sys
+import tweepy, time, sys, pytz
 import datetime, requests, json
 from keys import *
 
@@ -24,21 +24,33 @@ if option == "match":
 
 elif option == "fad":
     query = None
-    if len(sys.argv) > 2:
+    if len(sys.argv) == 3:
         query = str(sys.argv[2])
-    max_tweets = 2
-    searched_tweets = []
-    last_id = -1
-    while len(searched_tweets) < max_tweets:
-        count = max_tweets - len(searched_tweets)
-        try:
-            new_tweets = api.search(q=query, count=count, max_id=str(last_id - 1))
-            if not new_tweets:
-                break
-            searched_tweets.extend(new_tweets)
-            last_id = new_tweets[-1].id
-        except tweepy.TweepError as e:
-            print("error")
-            break
-    for x in searched_tweets:
-       print(x.text)
+        from fad import foolAndDeploy
+        foolAndDeploy(query)
+    else:
+        print("wrong number of arguments given")
+
+elif option == "highnoon":
+    #time =  12 - datetime.datetime.utcnow().hour
+    #input_utc_offset = datetime.timedelta(hours=time)
+    #timezone_ids = set()
+    #now = datetime.datetime.now(pytz.utc)
+    #for tz in map(pytz.timezone, pytz.all_timezones_set):
+    #    dt = now.astimezone(tz)    
+    #    tzinfos = getattr(tz, '_tzinfos', [(dt.tzname(), dt.dst(), dt.utcoffset())])
+    #    if any(dst == input_utc_offset for dst, _, _ in tzinfos):
+    #        timezone_ids.add(tz.zone)
+    #print(timezone_ids)
+    home = pytz.timezone('Europe/Berlin')
+    fmt = '%Y-%m-%d %H:%M:%S %Z%z'
+    highnoon = []
+    for i in pytz.common_timezones:
+        test = pytz.timezone(i)
+        hometime = home.localize(datetime.datetime.now())
+        timethere = hometime.astimezone(test)
+        #print(timethere.strftime(fmt))
+        if timethere.hour == 12:
+            highnoon.append(i)
+    print(highnoon)
+
