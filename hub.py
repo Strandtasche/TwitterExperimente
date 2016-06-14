@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import tweepy, time, sys, pytz
+import tweepy, time, sys, pytz, random
 import datetime, requests, json
 from keys import *
 
@@ -50,7 +50,20 @@ elif option == "highnoon":
         hometime = home.localize(datetime.datetime.now())
         timethere = hometime.astimezone(test)
         #print(timethere.strftime(fmt))
-        if timethere.hour == 12:
+        if timethere.hour == 12 and len(i) > 4:
             highnoon.append(i)
-    print(highnoon)
+    location = random.choice(highnoon)
+    temp = location.split('/')
+    #print(temp)
+    tweetstring = "It's High Noon... In " + temp[1] + " (" + temp[0] + ")"
+    #print(len(tweetstring))
+
+elif option == "hunting":
+    query = None
+    if len(sys.argv) == 3:
+        query = str(sys.argv[2])
+        from fad import huntingforhighnoon
+        huntingforhighnoon(query)
+    else:
+        print("wrong number of arguments given")
 
