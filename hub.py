@@ -10,6 +10,10 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
+authAlt = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+authAlt.set_access_token(ACCESS_KEY_ALT, ACCESS_SECRET_ALT)
+apiAlt = tweepy.API(authAlt)
+
 if option == "match":
     player = None
     count = None
@@ -50,13 +54,17 @@ elif option == "highnoon":
         hometime = home.localize(datetime.datetime.now())
         timethere = hometime.astimezone(test)
         #print(timethere.strftime(fmt))
-        if timethere.hour == 12 and len(i) > 4:
+        if timethere.hour == 12 and len(i) > 4 and not (i[0] == 'U' and i[1]=='S') and not i[0] == 'C':
             highnoon.append(i)
     location = random.choice(highnoon)
+    location.replace("_", " ")
+    #print(highnoon)
     temp = location.split('/')
     #print(temp)
     tweetstring = "It's High Noon... In " + temp[1] + " (" + temp[0] + ")"
     #print(len(tweetstring))
+    apiAlt.update_status(tweetstring)
+    print('Printed successfully')
 
 elif option == "hunting":
     query = None
@@ -66,4 +74,27 @@ elif option == "hunting":
         huntingforhighnoon(query)
     else:
         print("wrong number of arguments given")
+
+elif option == "mentions":
+    tasks = api.mentions_timeline(count=5)
+    handledLast = open('mentionHandle', 'r')
+    lastTweetId = int(handledLast.read())
+    from mentions import handleRequest
+    print(lastTweetId)
+    currentRequests = []
+    for i in tasks:
+        if (i.id != lastTweetId):
+            currentRequests.append(i)
+            print("New Tweet: " + i.text)
+        else:
+            break
+    if currentRequests == []:
+        print("No new Tweets! exiting...")
+        exit()
+    for k in currentRequests:
+        handleRequest(k.text)
+        time.sleep(5)
+    mostRecentTweet = currentRequests[0].id
+    handle = open('mentionHandle', 'w')
+    handle.write(str(mostRecentTweet))
 
