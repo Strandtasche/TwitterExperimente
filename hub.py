@@ -6,13 +6,18 @@ from keys import *
 
 option = str(sys.argv[1])
 
-auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-api = tweepy.API(auth)
+try:
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
+    api = tweepy.API(auth)
+    
+    authAlt = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    authAlt.set_access_token(ACCESS_KEY_ALT, ACCESS_SECRET_ALT)
+    apiAlt = tweepy.API(authAlt)
+except:
+    print("Couldn't establish connection to Twitter")
+    exit()
 
-authAlt = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-authAlt.set_access_token(ACCESS_KEY_ALT, ACCESS_SECRET_ALT)
-apiAlt = tweepy.API(authAlt)
 
 if option == "match":
     player = None
@@ -92,9 +97,13 @@ elif option == "mentions":
         print("No new Tweets! exiting...")
         exit()
     for k in currentRequests:
-        handleRequest(k.text)
+        output = handleRequest(k.text)
+        if output != "Failed Parse, Invalid Input":
+            #print(output)
+            #print(len(output))
+           api.update_status('@' + k.user.screen_name + " " + output, in_reply_to_status_id = k.id) 
         time.sleep(5)
     mostRecentTweet = currentRequests[0].id
-    handle = open('mentionHandle', 'w')
-    handle.write(str(mostRecentTweet))
+    #handle = open('mentionHandle', 'w')
+    #handle.write(str(mostRecentTweet))
 

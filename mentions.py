@@ -17,5 +17,19 @@ def handleRequest(tweetstring):
         exit()
     else:
         data = r.json()
-        print(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
+        output = ""
+        #datafile = open("data.json", "w")
+        #datafile.write(json.dumps(data, sort_keys=False, indent=4, separators=(',', ': ')))
+        #datafile.close()
+        if (data['result']['radiant_win']):
+            output += "Radiant"
+            score_winner = data['result']['radiant_score'] - 1
+            score_loser = data['result']['dire_score'] - 1
+        else:
+            output += "Dire"
+            score_loser = data['result']['radiant_score'] - 1
+            score_winner = data['result']['dire_score'] - 1
+        #print(len(data['result']['players']))
+        output += " won with " + str(score_winner) + " to " +str(score_loser) + ". Details: https://yasp.co/matches/" + str(matchId) 
+        return output
 
