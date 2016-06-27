@@ -62,7 +62,7 @@ elif option == "highnoon":
         if timethere.hour == 12 and len(i) > 4 and not (i[0] == 'U' and i[1]=='S') and not i[0] == 'C':
             highnoon.append(i)
     location = random.choice(highnoon)
-    location.replace("_", " ")
+    location = location.replace("_", " ")
     #print(highnoon)
     temp = location.split('/')
     #print(temp)
