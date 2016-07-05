@@ -9,18 +9,20 @@ def getRecentMatch(id=None, count=None):
     if count == None:
         count = 1
 
-    matchrequest = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?account_id=' + id + '&key=' + STEAM_API_KEY + '&matches_requested=1' 
-    r = requests.get(matchrequest)
+    player = 'Strandtasche'
 
+    matchRequestAccId = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?account_id=' + id + '&key=' + STEAM_API_KEY + '&matches_requested=' + str(count)
+
+    #matchRequestUsrnm = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key=' + STEAM_API_KEY + '&player_name=' + player + 'matches_requested=' + str(count)
+
+    r = requests.get(matchRequestAccId)
 
     if r.status_code != 200:
         print("responsecode != 200, but rather " + str(r.status_code))
-        #maybe error handling?
         exit()
     else:
         data = r.json()
-        print(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
-        current = open('currentGame', 'r')
-        print(current)
-
-
+        output = ""
+        datafile = open("dataName.json", "w")
+        datafile.write(json.dumps(data, sort_keys=False, indent=4, separators=(',', ': ')))
+        datafile.close()

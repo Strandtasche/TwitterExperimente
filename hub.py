@@ -98,12 +98,13 @@ elif option == "mentions":
         exit()
     for k in currentRequests:
         output = handleRequest(k.text)
-        if output != "Failed Parse, Invalid Input":
+        #if output != "Failed Parse, Invalid Input":
             #print(output)
             #print(len(output))
-           api.update_status('@' + k.user.screen_name + " " + output, in_reply_to_status_id = k.id) 
+        api.update_status('@' + k.user.screen_name + " " + output, in_reply_to_status_id = k.id) 
         time.sleep(5)
+
     mostRecentTweet = currentRequests[0].id
-    #handle = open('mentionHandle', 'w')
-    #handle.write(str(mostRecentTweet))
+    handle = open('mentionHandle', 'w')
+    handle.write(str(mostRecentTweet))
 
